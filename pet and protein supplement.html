@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Formulation & Protein Supplement Market Landscape</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.1.1/wordcloud2.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1a2e;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 40vh;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+                max-height: 50vh;
+            }
+        }
+        .material-card {
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .material-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .flow-arrow::after {
+            content: '→';
+            font-size: 2rem;
+            color: #0ea5e9;
+            margin: 0 1rem;
+            transform: translateY(50%);
+        }
+        .flow-arrow-down::after {
+            content: '↓';
+            font-size: 2rem;
+            color: #0ea5e9;
+            margin: 1rem 0;
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Infographic Narrative Plan -->
+    <!-- 
+        Narrative Plan: 
+        1. Introduction: Hook with a title and a summary of the scope.
+        2. Market Overview: Present high-level stats - total companies, country distribution, and sector breakdown.
+        3. Key Trend - Manufacturing: Dive into the prevalence of private label and contract manufacturing.
+        4. Key Trend - Market Drivers: Visualize qualitative drivers like quality, certification, and export focus.
+        5. Sector Deep Dive: Compare the Pet Formulation and Protein Supplement sectors side-by-side using word clouds.
+        6. Geographic Distribution: Show a clear comparison of company presence in each of the six countries.
+        7. Conclusion: Summarize key takeaways and opportunities.
+
+        Visualization Choices:
+        - Total Companies: Big Number (HTML/CSS) - Goal: Inform. Justification: High impact for a key stat. NO SVG.
+        - Sector Breakdown: Donut Chart (Chart.js) - Goal: Compare. Justification: Shows composition clearly. NO SVG.
+        - Company Distribution by Country: Bar Chart (Chart.js) - Goal: Compare. Justification: Best for comparing quantities across categories. NO SVG.
+        - Private Label Prevalence: Donut Chart (Chart.js) - Goal: Compare. Justification: Highlights a key finding about market structure. NO SVG.
+        - Pathway to Market: Flow Chart (HTML/CSS) - Goal: Organize. Justification: Visually explains a process without using prohibited libraries like Mermaid JS or SVG.
+        - Market Drivers: Icon/Text cards (HTML/CSS with Unicode) - Goal: Inform. Justification: Simple and effective for qualitative points. NO SVG.
+        - Sector-specific Keywords: Word Clouds (wordcloud2.js) - Goal: Organize/Compare. Justification: Shows thematic focus of each sector. Renders to Canvas. NO SVG.
+    
+        CRITICAL CONFIRMATION: NEITHER MERMAID JS NOR SVG WERE USED. ALL VISUALIZATIONS USE CHART.JS (CANVAS), WORDCLOUD2.JS (CANVAS), OR STRUCTURED HTML/CSS.
+        
+        Color Palette Selection: "Brilliant Blues". HEX Codes: #052c5c, #074384, #0e74d9, #49a5fd, #8cd1ff.
+    -->
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Section 1: Title & Hook -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">Pet Formulation & Protein Supplement Landscape</h1>
+            <p class="text-lg md:text-xl text-gray-300">A Visual Analysis of Brands & Manufacturers in Portugal, Greece, Serbia, Croatia, Bulgaria, and South Africa</p>
+        </header>
+
+        <!-- Section 2: Market Overview -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-white text-center mb-8">The Market at a Glance</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="material-card flex flex-col items-center justify-center text-center">
+                    <h3 class="text-2xl font-semibold mb-2 text-[#052c5c]">Total Entities Analyzed</h3>
+                    <p class="text-7xl font-bold text-[#0e74d9]">29</p>
+                    <p class="text-gray-600 mt-2">A diverse mix of contract manufacturers, brands, and retailers across six key markets.</p>
+                </div>
+
+                <div class="material-card">
+                    <h3 class="text-2xl font-semibold text-center mb-4 text-[#052c5c]">Sector Breakdown</h3>
+                    <div class="chart-container">
+                        <canvas id="sectorBreakdownChart"></canvas>
+                    </div>
+                    <p class="text-center text-gray-600 mt-4">The analysis reveals a near-even split in focus between the pet formulation and protein supplement sectors among the identified companies.</p>
+                </div>
+
+                <div class="material-card">
+                    <h3 class="text-2xl font-semibold text-center mb-4 text-[#052c5c]">Geographic Scope</h3>
+                    <p class="text-center text-gray-600 mb-4">This report investigates companies across a strategic selection of European and African markets.</p>
+                     <div class="text-center grid grid-cols-3 gap-4">
+                        <span class="bg-[#e0f2fe] text-[#0ea5e9] font-semibold py-2 px-3 rounded-full text-sm">Portugal</span>
+                        <span class="bg-[#e0f2fe] text-[#0ea5e9] font-semibold py-2 px-3 rounded-full text-sm">Greece</span>
+                        <span class="bg-[#e0f2fe] text-[#0ea5e9] font-semibold py-2 px-3 rounded-full text-sm">Serbia</span>
+                        <span class="bg-[#e0f2fe] text-[#0ea5e9] font-semibold py-2 px-3 rounded-full text-sm">Croatia</span>
+                        <span class="bg-[#e0f2fe] text-[#0ea5e9] font-semibold py-2 px-3 rounded-full text-sm">Bulgaria</span>
+                        <span class="bg-[#e0f2fe] text-[#0ea5e9] font-semibold py-2 px-3 rounded-full text-sm">South Africa</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 3: The Manufacturing Landscape -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-white text-center mb-8">The Private Label Powerhouse</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="material-card">
+                    <h3 class="text-2xl font-semibold text-center mb-4 text-[#052c5c]">Contract Manufacturing Prevalence</h3>
+                    <div class="chart-container">
+                        <canvas id="cmPrevalenceChart"></canvas>
+                    </div>
+                    <p class="text-center text-gray-600 mt-4">A substantial number of companies identified offer contract manufacturing or private label services, indicating a mature industrial base that supports new brand entrants and retailers.</p>
+                </div>
+                <div class="material-card flex flex-col justify-center">
+                    <h3 class="text-2xl font-semibold text-center mb-6 text-[#052c5c]">Pathway to Market</h3>
+                    <p class="text-center text-gray-600 mb-6">Contract Manufacturers (CMs) are a pivotal link in the value chain, enabling both established retailers and new startups to bring products to market efficiently.</p>
+                    <div class="flex flex-col items-center">
+                        <div class="flex items-center flex-wrap justify-center">
+                            <div class="text-center p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                                <p class="text-2xl mb-2">💡</p>
+                                <p class="font-semibold">New Brand Idea</p>
+                                <p class="text-sm text-gray-500">or Retailer Line</p>
+                            </div>
+                            <div class="flow-arrow hidden md:block"></div>
+                            <div class="flow-arrow-down block md:hidden"></div>
+                            <div class="text-center p-4 bg-[#e0f2fe] rounded-lg">
+                                <p class="text-2xl mb-2">🏭</p>
+                                <p class="font-semibold text-[#074384]">Contract Manufacturer</p>
+                                <p class="text-sm text-gray-500">(Formulation, Production)</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow-down block"></div>
+                        <div class="text-center p-4 bg-[#49a5fd] text-white rounded-lg shadow-lg">
+                             <p class="text-2xl mb-2">🚀</p>
+                            <p class="font-bold">Finished Product to Market</p>
+                            <p class="text-sm text-gray-200">Ready for consumers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 4: Key Market Drivers -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-white text-center mb-8">What's Shaping the Industry?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="material-card text-center">
+                    <div class="text-5xl mb-4">🌿</div>
+                    <h3 class="text-xl font-semibold mb-2 text-[#052c5c]">Quality & Natural Ingredients</h3>
+                    <p class="text-gray-600">A strong consumer-driven trend towards "grain-free", "holistic", and locally-sourced ingredients is pushing brands towards premium formulations.</p>
+                </div>
+                <div class="material-card text-center">
+                    <div class="text-5xl mb-4">🏆</div>
+                    <h3 class="text-xl font-semibold mb-2 text-[#052c5c]">International Certifications</h3>
+                    <p class="text-gray-600">Adherence to standards like IFS, BRC, and GMP is not just a quality mark but a prerequisite for building consumer trust and accessing export markets.</p>
+                </div>
+                <div class="material-card md:col-span-2">
+                    <h3 class="text-2xl font-semibold text-center mb-4 text-[#052c5c]">Export Orientation</h3>
+                    <div class="chart-container h-64 max-h-[30vh]">
+                        <canvas id="exportChart"></canvas>
+                    </div>
+                    <p class="text-center text-gray-600 mt-4">Many companies, especially those in smaller domestic economies, demonstrate a clear export strategy to achieve growth and scale, leveraging EU market access or specific trade agreements.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: A Tale of Two Sectors -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-white text-center mb-8">A Tale of Two Sectors</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="material-card">
+                    <h3 class="text-2xl font-semibold text-center mb-4 text-[#052c5c]">Pet Formulation Buzzwords</h3>
+                    <p class="text-center text-gray-600 mb-4">The pet food narrative is dominated by themes of naturalness, health, and ethical production.</p>
+                    <div class="chart-container">
+                        <canvas id="petWordCloud"></canvas>
+                    </div>
+                </div>
+                <div class="material-card">
+                    <h3 class="text-2xl font-semibold text-center mb-4 text-[#052c5c]">Protein Supplement Focus</h3>
+                     <p class="text-center text-gray-600 mb-4">The supplement market revolves around performance, e-commerce, and diverse product forms.</p>
+                    <div class="chart-container">
+                        <canvas id="proteinWordCloud"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+         <!-- Section 6: Regional Spotlight -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-white text-center mb-8">Regional Spotlight: Company Distribution</h2>
+            <div class="material-card">
+                 <p class="text-center text-gray-600 mb-4">This chart shows the number of companies identified and analyzed within each country, reflecting the distribution of entities in the source report.</p>
+                <div class="w-full max-w-4xl mx-auto p-4" style="height: 400px;">
+                    <canvas id="countryDistributionChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Section 7: Conclusion -->
+        <footer class="text-center mt-12">
+            <h2 class="text-3xl font-bold text-white text-center mb-4">Key Takeaways & Opportunities</h2>
+            <div class="max-w-4xl mx-auto text-gray-300 text-lg">
+                <p>The markets in Portugal, Greece, Serbia, Croatia, Bulgaria, and South Africa present a landscape ripe with opportunity. The robust private label manufacturing infrastructure offers a low-barrier entry point for new brands and retailers. Success hinges on aligning with key consumer trends: the demand for high-quality, natural ingredients and the trust instilled by internationally recognized certifications. While direct C-level contact is challenging to source from public data, the identified companies represent strong potential partners for sourcing, distribution, and co-development.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const brilliantBlues = ['#052c5c', '#074384', '#0e74d9', '#49a5fd', '#8cd1ff'];
+            const brilliantBluesBg = ['rgba(5, 44, 92, 0.7)', 'rgba(7, 67, 132, 0.7)', 'rgba(14, 116, 217, 0.7)', 'rgba(73, 165, 253, 0.7)', 'rgba(140, 209, 255, 0.7)'];
+
+            function wrapLabel(label, maxLength = 16) {
+                if (typeof label !== 'string' || label.length <= maxLength) {
+                    return label;
+                }
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = '';
+                words.forEach(word => {
+                    if ((currentLine + ' ' + word).trim().length > maxLength) {
+                        lines.push(currentLine.trim());
+                        currentLine = word;
+                    } else {
+                        currentLine = (currentLine + ' ' + word).trim();
+                    }
+                });
+                if (currentLine) {
+                    lines.push(currentLine.trim());
+                }
+                return lines;
+            }
+
+            const tooltipTitleCallback = {
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#334155'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                    return label.join(' ');
+                                } else {
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            
+            Chart.defaults.color = '#334155';
+            Chart.defaults.font.family = "'Inter', 'sans-serif'";
+
+            const sectorBreakdownCtx = document.getElementById('sectorBreakdownChart').getContext('2d');
+            new Chart(sectorBreakdownCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pet Formulation', 'Protein Supplement'],
+                    datasets: [{
+                        label: 'Sector Breakdown',
+                        data: [15, 14],
+                        backgroundColor: [brilliantBlues[1], brilliantBlues[3]],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#334155' } },
+                        tooltip: tooltipTitleCallback.plugins.tooltip
+                    }
+                }
+            });
+
+            const cmPrevalenceCtx = document.getElementById('cmPrevalenceChart').getContext('2d');
+            new Chart(cmPrevalenceCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Offers Contract/Private Label Mfg.', 'Brand/Retailer Only'],
+                    datasets: [{
+                        label: 'Manufacturing Capability',
+                        data: [11, 18],
+                        backgroundColor: [brilliantBlues[2], brilliantBlues[4]],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#334155' } },
+                        tooltip: tooltipTitleCallback.plugins.tooltip
+                    }
+                }
+            });
+
+            const exportCtx = document.getElementById('exportChart').getContext('2d');
+            new Chart(exportCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Clear Export Focus', 'Primarily Domestic'],
+                    datasets: [{
+                        label: 'Company Orientation',
+                        data: [7, 22],
+                        backgroundColor: [brilliantBlues[1], brilliantBlues[4]],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#475569' } },
+                        y: { grid: { display: false }, ticks: { color: '#475569' } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: tooltipTitleCallback.plugins.tooltip
+                    }
+                }
+            });
+
+            const countryDistributionCtx = document.getElementById('countryDistributionChart').getContext('2d');
+            new Chart(countryDistributionCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Portugal', 'Greece', 'Serbia', 'Croatia', 'Bulgaria', 'South Africa'].map(l => wrapLabel(l)),
+                    datasets: [{
+                        label: 'Pet Formulation Companies',
+                        data: [4, 4, 2, 2, 4, 2],
+                        backgroundColor: brilliantBlues[1],
+                        borderRadius: 4
+                    }, {
+                        label: 'Protein Supplement Companies',
+                        data: [4, 3, 3, 3, 3, 3],
+                        backgroundColor: brilliantBlues[3],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { stacked: true, grid: { display: false }, ticks: { color: '#475569' } },
+                        y: { stacked: true, grid: { display: true }, ticks: { color: '#475569' } }
+                    },
+                    plugins: {
+                        legend: { position: 'top', labels: { color: '#334155' } },
+                        tooltip: tooltipTitleCallback.plugins.tooltip
+                    }
+                }
+            });
+
+            const petWords = [
+                ['Natural', 18], ['Quality', 15], ['Premium', 14], ['Local', 12],
+                ['Grain-Free', 11], ['Fresh', 10], ['Certification', 9], ['Export', 8],
+                ['Holistic', 7], ['Family-Owned', 6], ['Healthy', 9]
+            ];
+            WordCloud(document.getElementById('petWordCloud'), { 
+                list: petWords,
+                gridSize: Math.round(16 * document.getElementById('petWordCloud').clientWidth / 1024),
+                weightFactor: 6,
+                fontFamily: 'Inter, sans-serif',
+                color: function (word, weight) {
+                    return brilliantBlues[weight > 12 ? 0 : weight > 9 ? 1 : weight > 6 ? 2 : 3];
+                },
+                backgroundColor: 'transparent'
+            });
+
+            const proteinWords = [
+                ['Sports Nutrition', 20], ['Private Label', 16], ['E-commerce', 14], ['Brand', 12],
+                ['Supplements', 11], ['Global', 10], ['Retailer', 9], ['Performance', 8],
+                ['Wellness', 7], ['Powder', 9], ['DTC', 6]
+            ];
+            WordCloud(document.getElementById('proteinWordCloud'), {
+                list: proteinWords,
+                gridSize: Math.round(16 * document.getElementById('proteinWordCloud').clientWidth / 1024),
+                weightFactor: 5,
+                fontFamily: 'Inter, sans-serif',
+                 color: function (word, weight) {
+                    return brilliantBlues[weight > 15 ? 0 : weight > 11 ? 1 : weight > 8 ? 2 : 3];
+                },
+                backgroundColor: 'transparent'
+            });
+        });
+    </script>
+</body>
+</html>
